@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+</head>
+<body>
+    <h1>ログイン</h1>
+
+    <!-- Spring Securityがログイン失敗時に ?error を付けてリダイレクトする -->
+    <p th:if="${param.error}" style="color:red;">
+        ユーザー名またはパスワードが正しくありません
+    </p>
+    <p th:if="${param.logout}" style="color:green;">
+        ログアウトしました
+    </p>
+
+    <!-- action="/login" はSpring Securityが自動で処理する -->
+    <form th:action="@{/login}" method="post">
+        <div>
+            <label>ユーザー名</label><br>
+            <input type="text" name="username">
+        </div>
+        <div>
+            <label>パスワード</label><br>
+            <input type="password" name="password">
+        </div>
+        <button type="submit">ログイン</button>
+    </form>
+
+    <a th:href="@{/user/register}">新規登録はこちら</a>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ToDoリスト</title>
+</head>
+
+<body>
+	<h1>ToDoリスト</h1>
+
+	<!-- ログアウトボタン -->
+	<form th:action="@{/logout}" method="post">
+		<button type="submit">ログアウト</button>
+	</form>
+
+	<!-- ToDo追加フォーム -->
+	<h2>新しいToDoを追加</h2>
+	<form th:action="@{/todo/create}" th:object="${todoForm}" method="post">
+		<input type="text" th:field="*{title}" placeholder="タイトルを入力">
+		<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red;"></span>
+		<button type="submit">追加</button>
+	</form>
+
+	<!-- ToDoの一覧表示 -->
+	<h2>一覧</h2>
+	<p th:if="${#lists.isEmpty(todos)}">ToDoがありません</p>
+
+	<ul>
+		<li th:each="todo : ${todos}">
+
+			<!-- 完了済みなら打ち消し線 -->
+			<span th:text="${todo.title}" th:style="${todo.completed} ? 'text-decoration:line-through;' : ''">
+			</span>
+
+			<!-- 未完了の場合だけ「完了」ボタンを表示 -->
+			<form th:if="${!todo.completed}" th:action="@{/todo/complete/{id}(id=${todo.todoId})}" method="post"
+				style="display:inline;">
+				<button type="submit">完了</button>
+			</form>
+
+			<!-- 削除ボタン -->
+			<form th:action="@{/todo/delete/{id}(id=${todo.todoId})}" method="post" style="display:inline;">
+				<button type="submit">削除</button>
+			</form>
+		</li>
+	</ul>
+</body>
+
+</html>
